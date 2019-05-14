@@ -4,7 +4,7 @@ from soup_util import get_soup, add_query
 import Levenshtein
 
 
-def search_lyrics_from_query(title, artists=None):
+def search_lyrics_from_query(title, artists=''):
     q = []
     a_q = ('Aselect', '2')
     b_q = ('Bselect', '3')
@@ -29,11 +29,12 @@ def search_lyrics_from_query(title, artists=None):
 
         dist = Levenshtein.distance(artists, cur_artists) + Levenshtein.distance(title, cur_title)
         if min_dist > dist:
+            min_dist = dist
             min_id = cur_id
 
         # print('title: {} \nartist: {} \nmusic id: {}\n'.format(cur_title, cur_artists, cur_id))
 
-    return min_id, min_dist
+    return UTANET_TOP + min_id, min_dist
 
 
 def get_lyrics_from_lyrics_page(url):
@@ -44,7 +45,8 @@ def get_lyrics_from_lyrics_page(url):
 
 
 if __name__ == '__main__':
-    url = search_lyrics_from_query('Tulip')
+    url, dist = search_lyrics_from_query('Tulip', '速水奏')
+    print(url)
     lyrics = get_lyrics_from_lyrics_page(url)
 
     print(lyrics)
